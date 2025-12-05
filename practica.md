@@ -13,6 +13,9 @@ M.ª Ángeles Buzón Campaña
 # y define los puertos que se van a usar.
 # Por último se indica la imagen a cargar en el contenedor plesk/plesk.
 docker run -d --name plesk --privileged --cgroupns=host -v /sys/fs/cgroup:/sys/fs/cgroup:rw -v plesk_data_fresh:/var/lib/plesk -p 666:80 -p 443:443 -p 8880:8880 -p 8443:8443 plesk/plesk
+
+# Volver a levantar el contenedor:
+docker start plesk
 ```
 
 
@@ -30,7 +33,6 @@ Y al principio el navegador no lo muestra, pero es porque se estaba cargando. Pu
 Si consulto los certificados, se están usando unos que ha creado Plesk automáticamente, pero el navegador sigue interpretando esta página como no segura. En un navegador Chromium puedo ver la info del certificado, que vence casi al mismo tiempo que se crea:
 ![Certificado de Plesk en Vivaldi](img/01_certificado.png)
 
-**¿Qué ventajas ofrece administrar un servidor web desde Plesk en vez de línea
-de comandos?**
+**¿Qué ventajas ofrece administrar un servidor web desde Plesk en vez de línea de comandos?**
 
 Es más intuitivo .....
