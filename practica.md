@@ -95,6 +95,8 @@ Pero al menos aparece como activo en el listado:
 
 **¿Por qué es útil segmentar webs en vhosts en lugar de alojarlas juntas?**
 
+Porque garantiza el aislamiento entre ellas, de manera que cada web tenga su espacio, sus permisos, su configuración, etc. Esto a su vez hace que la arquitectura del servidor sea más segura. Por ejemplo, si una de las webs es atacada a través de una vulnerabilidad en el código y no estuviera aislada, el atacante podría moverse con facilidad por los directorios y acceder también a las demás webs. También tiene ventajas de cara a la administración, ya que con una estructura limpia y separada es más fácil localizar archivos y desplegar y eliminar servicios. Además, cada web puede tener su propio software; por ejemplo, que cada una use versiones diferentes de PHP, o que cada una tenga su certificado SSL/TLS.
+
 ## 05. Autenticación y control de acceso
 Me voy al panel de control de mi dominio `focused-khayyam.172-17-0-2.plesk.page` y luego a la sección `Security > Password-Protected Directories`.
 
@@ -113,6 +115,9 @@ Ahora comentamos algunas jails preconfiguradas de Plesk:
 3. `ssh`: escanea en busca de fallos de autenticación de SSH.
 
 **¿Por qué son los jails importantes? ¿Se te ocurre algún jail propio?**
+Son importantes porque son una medida de seguridad básica para evitar ataques de fuerza bruta, en los que un bot intenta adivinar credenciales de acceso a SSH, FTP o paneles de administración, de manera que el atacante pueda tomar control del servidor, instalar backdoors o modificar datos.
+
+Un jail adicional podría ser configurar el bloqueo de direcciones IP, con una lista blanca de excepciones, que accedan a una URL en concreto que se considere privada o de uso solo interno.
 
 ## 06. Certificado digital
 Antes de nada, instalo las extensiones Let's Encrypt y SSL It!, necesarias para instalar un certificado de este tipo.
