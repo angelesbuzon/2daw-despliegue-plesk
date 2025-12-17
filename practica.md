@@ -357,7 +357,7 @@ El rendimiento de un servidor web depende de varios factores:
 ## 08. Despliegue de aplicaciones
 No puedo añadir más de un dominio en la versión gratuita, pero sí subdominios al que ya tengo, así que eso hago: creo el subdominio `wp`.
 
-![Creación de subdominio](image.png)
+![Creación de subdominio](img/08_creacionsubdom.png)
 
 Luego me lleva directamente al panel de control del subdominio y le doy al botón de instalación de Wordpress, y configuro los ajustes.
 
