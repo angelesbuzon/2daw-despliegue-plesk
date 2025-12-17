@@ -4,8 +4,6 @@ M.ª Ángeles Buzón Campaña
 
 ## 00. Preparación
 
-![DescripcionImagen][./img/nombreImagen.png]
-
 ```bash
 # Imagen para la práctica:
 # Este comando crea el contenedor con nombre plesk con privilegios.
@@ -27,10 +25,12 @@ Tardo en levantar el contenedor:
 * Por conflictos extraños, tengo que cambiar el puerto local `80` a `666` (reflejo esto en el comando de arriba).
 
 Y al principio el navegador no lo muestra, pero es porque se estaba cargando. Puedo cargar la interfaz e iniciar sesión con las credenciales predeterminadas tanto en el puerto `8880` como en el `8443`:
+
 ![Inicio sesión en el navegador en el puerto 8880](img/01_puerto8880.png)
 ![Inicio sesión en el navegador en el puerto 8443](img/01_puerto8443.png)
 
 Si consulto los certificados, se están usando unos que ha creado Plesk automáticamente, pero el navegador sigue interpretando esta página como no segura. En un navegador Chromium puedo ver la info del certificado, que vence casi al mismo tiempo que se crea:
+
 ![Certificado de Plesk en Vivaldi](img/01_certificado.png)
 
 **¿Qué ventajas ofrece administrar un servidor web desde Plesk en vez de línea de comandos?**
@@ -62,6 +62,8 @@ En las subsecciones `Tools & Resources` y `Server Management` también puedo acc
 
 **Explica por qué es importante monitorizar estos parámetros.**
 
+Es importante para poder llevar un seguimiento, como con todo. Permite detectar errores, fallos de seguridad y problemas de rendimiento en el momento en que pasan, o por lo menos llevar un registro que poder consultar después. De esta manera, es más fácil garantizar la estabilidad del sistema y decidir cuál es la mejor forma de optimizar y mantener el servidor.
+
 ## 03. Instalación de extensiones
 Primero instalo **Firewall**, que protege el servidor de ataques controlando el acceso a los servicios mediante la configuración de reglas y políticas.
 
@@ -76,6 +78,9 @@ El sistema de búsqueda no encuentra Fail2Ban (luego me doy cuenta de que está 
 En la configuración no se puede hacer nada porque hay que añadir un dominio primero.
 
 **¿Qué riesgos tiene no contar con un sistema de protección adicional?**
+
+Supone exponer el servidor al acceso no autorizado de terceros, más o menos malintencionados, como cuando no se pone el candado en una puerta. En los peores casos esto puede implicar sufrir ataques de fuerza bruta o la introducción de malware, lo que a su vez puede hacer que se caiga la web, se pierdan datos o lo contrario, que se extraigan datos como puede ser la información personal de los usuarios.
+
 
 ## 04. Creación de dominios
 Creo un nuevo dominio (uno que me ofrece Plesk porque no tengo ninguno comprado) y sustituyo el `index.html` creado de forma predeterminada por un `index.php` muy sencillo.
@@ -115,9 +120,10 @@ Ahora comentamos algunas jails preconfiguradas de Plesk:
 3. `ssh`: escanea en busca de fallos de autenticación de SSH.
 
 **¿Por qué son los jails importantes? ¿Se te ocurre algún jail propio?**
+
 Son importantes porque son una medida de seguridad básica para evitar ataques de fuerza bruta, en los que un bot intenta adivinar credenciales de acceso a SSH, FTP o paneles de administración, de manera que el atacante pueda tomar control del servidor, instalar backdoors o modificar datos.
 
-Un jail adicional podría ser configurar el bloqueo de direcciones IP, con una lista blanca de excepciones, que accedan a una URL en concreto que se considere privada o de uso solo interno.
+Un jail adicional podría ser configurar el bloqueo de direcciones IP que accedan a una URL en concreto que se considere privada o de uso solo interno, configurando también una lista blanca de excepciones.
 
 ## 06. Certificado digital
 Antes de nada, instalo las extensiones Let's Encrypt y SSL It!, necesarias para instalar un certificado de este tipo.
@@ -136,8 +142,10 @@ Si intento acceder a `https://localhost:8443` puedo iniciar sesión y navegar po
 
 **¿Qué riesgos existen si seguimos usando HTTP en lugar de HTTPS?**
 
+La comunicación de datos no es cifrada y queda expuesta a terceros, que pueden interceptarla o modificarla de manera malintencionada. Algunos de estos datos pueden ser bastante sensibles, como contraseñas o información personal introducida en formularios. Además, cuando los navegadores no encuentra un certificado HTTPS válido, marcan el sitio HTTP como no seguro, lo cual da problemas para acceder al sitio web desde el punto de vista técnico, reduce la confianza del usuario y perjudica el posicionamiento en buscadores.
+
 ## 07. Rendimiento
-Compruebo los paquetes de Ubuntu y ab ya está instalado, así que procedo a intentar . Me da problemas porque no caigo en añadir la `/` final que indica la ruta raíz de la web. Una vez que lo hago, ya sí hace la prueba de rendimiento. Hago cuatro con diferentes parámetros:
+Compruebo los paquetes de Ubuntu y ab ya está instalado, así que procedo a intentar hacer las pruebas. Me da problemas porque no caigo en añadir la `/` final que indica la ruta raíz de la web. Una vez que lo hago, ya sí hace la prueba de rendimiento. Hago cuatro con diferentes parámetros:
 
 ```bash
 # Prueba 1: 1000 peticiones, 50 concurrentes
@@ -338,6 +346,14 @@ Percentage of the requests served within a certain time (ms)
 
 **¿Qué factores influyen en el rendimiento de un servidor web?**
 
+El rendimiento de un servidor web depende de varios factores:
+
+* Los recursos de hardware (CPU, RAM, almacenamiento en disco).
+* La configuración del servidor (si se usa Apache o Nginx según el proyecto, la versión y configuración de PHP, el uso de sistemas de caché).
+* El número de peticiones concurrentes y la carga de tráfico.
+* La optimización de las aplicaciones en sí y de las consultas a las bases de datos.
+
+
 ## 08. Despliegue de aplicaciones
 No puedo añadir más de un dominio en la versión gratuita, pero sí subdominios al que ya tengo, así que eso hago: creo el subdominio `wp`.
 
@@ -382,3 +398,7 @@ Puedo acceder a los logs de WordPress desde el panel de control del dominio.
 ![Logs WP](img/08_logs.png)
 
 **¿Qué es WordPress? ¿Se usa hoy en día? ¿Tú lo usarías?**
+
+Wordpress es un sistema de gestión de contenidos (CMS) que se concibió originalmente para la creación de blogs, pero actualmente es la tecnología para crear páginas web en general más utilizada en el mercado. De hecho, casi la mitad de todas las webs del mundo utilizan Wordpress, más del 43% según datos de mayo de 2025 [(fuente)](https://wordpress.com/es/blog/2025/05/08/wordpress-estadisticas-cuota-de-mercado-y-mucho-mas/).
+
+No conozco Wordpress lo suficiente como para tener una opinión fundamentada, pero hay que tener en cuenta que el que sea el CMS más extendido no significa que sea el más apropiado siempre. Puede que sea útil para montar la web de pequeños clientes que necesiten poder gestionar ellos mismos los contenidos de un sitio web poco complejo de una manera sencilla. En cualquier caso, sí me parece útil conocerlo y saber utilizarlo como programador aunque sea por la cuota de mercado que representa.
